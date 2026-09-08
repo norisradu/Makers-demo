@@ -1,4 +1,9 @@
 :root {
+  /* The app is a fixed light theme only — tell the browser explicitly so
+     native popups (select, datalist) don't render themselves in the OS's
+     dark mode while the page around them stays light. */
+  color-scheme: light;
+
   --page: #f7f7f7;
   --surface: #ffffff;
   --ink: #1c1c1c;
@@ -681,6 +686,43 @@ p {
 
 .field small {
   font-weight: 400;
+}
+
+/* ---------- combobox (location field) ---------- */
+
+.combobox {
+  position: relative;
+}
+
+.combobox__list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-hover);
+  list-style: none;
+}
+
+.combobox__option {
+  padding: 9px 11px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.combobox__option--on {
+  background: var(--green-soft);
+  color: var(--green);
 }
 
 .form__types {
