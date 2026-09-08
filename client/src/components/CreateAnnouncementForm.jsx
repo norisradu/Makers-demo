@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { TYPE_META, isOffer, todayISO } from '../lib/format.js'
+import Combobox from './Combobox.jsx'
 
 const minutesOf = (time) => {
   const [h, m] = time.split(':').map(Number)
@@ -127,18 +128,13 @@ export default function CreateAnnouncementForm({ meta, currentUser, onCreate, on
 
       <label className="field">
         <span>{offer ? 'Preferred area (optional)' : 'Location'}</span>
-        <input
-          list="locations"
+        <Combobox
           value={form.location}
-          onChange={set('location')}
+          onChange={(location) => setForm({ ...form, location })}
+          options={meta.locations}
           placeholder={offer ? 'Anywhere in Cluj' : 'Baza Sportivă Gheorgheni'}
           required={!offer}
         />
-        <datalist id="locations">
-          {meta.locations.map((l) => (
-            <option key={l} value={l} />
-          ))}
-        </datalist>
       </label>
 
       <div className="grid">
