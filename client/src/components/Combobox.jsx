@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-// Diacritic-insensitive so typing "Manastur" still finds "Mănăștur" — most of
+/*// Diacritic-insensitive so typing "Manastur" still finds "Mănăștur" — most of
 // these location names carry Romanian diacritics the user won't always type.
 const DIACRITIC_FOLD = { ă: 'a', â: 'a', î: 'i', ș: 's', ş: 's', ț: 't', ţ: 't' }
 const normalize = (s) =>
@@ -28,7 +28,7 @@ export default function Combobox({ value, onChange, options, placeholder, requir
   const rootRef = useRef(null)
 
   const filtered = query.trim()
-    ? options.filter((o) => normalize(o).includes(normalize(query.trim())))
+    ? options.filter((o) => o.toLowerCase().includes(query.trim().toLowerCase()))
     : options
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Combobox({ value, onChange, options, placeholder, requir
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setOpen(true)
-      setHighlighted((i) => Math.min(i + 1, filtered.length - 1))
+      setHighlighted((i) => i + 1)
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setHighlighted((i) => Math.max(i - 1, 0))
@@ -64,25 +64,32 @@ export default function Combobox({ value, onChange, options, placeholder, requir
   return (
     <div className="combobox" ref={rootRef}>
       <input
-        id={id}
+        id={id}        // Chrome/Edge (not Firefox) run their own address-autofill heuristic off
+        // the field's name/label text — "location" next to an address-shaped
+        // value is exactly what it looks for — and can pop a native "saved
+        // addresses" overlay on top of our list. That overlay is a separate
+        // browser-chrome layer we can't style, and it's had the same
+        // invisible-until-hovered rendering bug the original <datalist> had.
+        // `autoComplete="off"` alone doesn't suppress it; starting the field
+        // readOnly and only lifting that on focus does, because Chromium
+        // decides whether to offer autofill before the field becomes editable.
+        name="pitchup-venue"
+        readOnly
+        onFocus={(e) => {
+          e.target.removeAttribute('readonly')
+          // Reopening always shows every option — only typing narrows it back down.
+          setQuery(value)
+          setOpen(true)
+        }}
         value={value}
         onChange={(e) => {
           onChange(e.target.value)
           setQuery(e.target.value)
           setOpen(true)
           setHighlighted(-1)
+
         }}
-        onFocus={() => {
-          // Reopening always shows every option — only typing narrows it back down.
-          setQuery('')
-          setOpen(true)
-        }}
-        onKeyDown={onKeyDown}
-        placeholder={placeholder}
-        required={required}
-        role="combobox"
-        aria-expanded={open}
-        aria-autocomplete="list"
+e="list"
         autoComplete="off"
       />
       {open && filtered.length > 0 && (
