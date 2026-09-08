@@ -23,4 +23,13 @@ You are reviewing a pull request. Do the following, in order:
 4. **A second angle.** Re-read the diff as if you were the person on-call
    this weekend. What would you want to know before approving?
 
+5. **Comment** If something seems wrong, add a comment to the PR to the corresponding code. 
+
+6. **Reject.** If the PR has blocking issues, mark it rejected: submit a
+   "Request changes" review summarizing the blocking issues. If the PR was
+   opened by the current user, GitHub will refuse to let them review their
+   own PR — in that case, ask the user how they want to record the
+   rejection (e.g. closing the PR, or a plain comment) instead of silently
+   skipping it.
+
 Keep each section short. Quote specific lines or files where relevant.

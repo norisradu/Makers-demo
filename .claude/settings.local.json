@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "PowerShell(node --version)",
-      "PowerShell(npm --version)"
+      "PowerShell(npm --version)",
+      "Bash(gh pr *)",
+      "Bash(git fetch *)",
+      "Bash(gh api *)",
+      "Bash(gh pr review 2 --request-changes --body ' *)"
     ]
   }
 }
