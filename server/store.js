@@ -31,13 +31,30 @@ export function kickoff(a) {
   return new Date(`${a.date}T${a.time}`)
 }
 
-export function list({ location, level, type, openOnly, includePast } = {}) {
+/**
+ * Free-text search over the fields a player would actually scan: the headline,
+ * the notes, where it is and who posted it.
+ */
+function matches(a, needle) {
+  const pattern = new RegExp(needle, 'i')
+  return (
+    pattern.test(a.title) ||
+    pattern.test(a.notes) ||
+    a.location.includes(needle) ||
+    a.organizer.includes(needle)
+  )
+}
+
+export function list({ location, level, type, openOnly, includePast, q } = {}) {
   const now = Date.now()
+  const needle = String(q ?? '').trim().toLowerCase()
+
   return announcements
     .filter((a) => !location || a.location === location)
     .filter((a) => !level || a.level === level)
     .filter((a) => !type || a.type === type)
     .filter((a) => !openOnly || a.joined.length < a.spots)
+    .filter((a) => !needle || matches(a, needle))
     .filter((a) => includePast || kickoff(a).getTime() > now - 2 * 3600_000)
     .sort((a, b) => kickoff(a) - kickoff(b))
 }

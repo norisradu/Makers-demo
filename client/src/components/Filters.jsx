@@ -1,12 +1,31 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { TYPE_META } from '../lib/format.js'
 
 export default function Filters({ meta, filters, onChange, resultCount }) {
   const isFiltered = filters.type || filters.location || filters.level || filters.openOnly
 
+  // Typing shouldn't hit the API on every keystroke, so the box keeps its own
+  // value and pushes it up once the player pauses.
+  const [text, setText] = useState(filters.q || '')
+
+  useEffect(() => {
+    setTimeout(() => onChange({ ...filters, q: text }), 250)
+  }, [text])
+
   return (
     <div className="filterbar">
       <div className="filterbar__inner">
+        <label className="search">
+          <span aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Search pitch, team or keyword…"
+            aria-label="Search announcements"
+          />
+        </label>
+
         <div className="segments" role="group" aria-label="Announcement type">
           <button
             className={`segment${!filters.type ? ' segment--on' : ''}`}
