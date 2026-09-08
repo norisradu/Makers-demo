@@ -145,7 +145,11 @@ export default function App() {
               <p className="empty">Loading…</p>
             ) : announcements.length === 0 ? (
               <div className="empty">
-                <p>Nothing matches those filters yet.</p>
+                <p>
+                  {filters.q
+                    ? `Nothing matches “${filters.q}” yet.`
+                    : 'Nothing matches those filters yet.'}
+                </p>
                 <button className="btn" onClick={() => setView('create')}>
                   Post the first one
                 </button>
@@ -166,6 +170,7 @@ export default function App() {
                         key={a.id}
                         announcement={a}
                         currentUser={currentUser}
+                        query={filters.q}
                         onJoin={handleJoin}
                         onLeave={handleLeave}
                         busy={busyId === a.id}

@@ -1,7 +1,7 @@
 import AvatarStack from './AvatarStack.jsx'
-import { TYPE_META, isOffer, timeLabel, priceLabel, spotsLabel } from '../lib/format.js'
+import { TYPE_META, isOffer, timeLabel, priceLabel, spotsLabel, highlight } from '../lib/format.js'
 
-export default function AnnouncementCard({ announcement, currentUser, onJoin, onLeave, busy }) {
+export default function AnnouncementCard({ announcement, currentUser, query, onJoin, onLeave, busy }) {
   const { id, title, type, location, time, duration, level, price, spots, joined, organizer, notes } =
     announcement
 
@@ -20,7 +20,7 @@ export default function AnnouncementCard({ announcement, currentUser, onJoin, on
         <span className={`spots${isFull ? ' spots--full' : ''}`}>{spotsLabel(announcement)}</span>
       </header>
 
-      <h3 className="card__title">{title}</h3>
+      <h3 className="card__title" dangerouslySetInnerHTML={{ __html: highlight(title, query) }} />
 
       <p className="card__when">
         {offer && <span className="muted">Free </span>}
@@ -32,7 +32,9 @@ export default function AnnouncementCard({ announcement, currentUser, onJoin, on
         {level} · {offer ? organizer : `Posted by ${organizer}`}
       </p>
 
-      {notes && <p className="card__notes">{notes}</p>}
+      {notes && (
+        <p className="card__notes" dangerouslySetInnerHTML={{ __html: highlight(notes, query) }} />
+      )}
 
       <footer className="card__foot">
         <AvatarStack

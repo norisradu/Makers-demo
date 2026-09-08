@@ -71,12 +71,13 @@ app.get('/api/meta', (_req, res) => {
 })
 
 app.get('/api/announcements', (req, res) => {
-  const { location, level, type, openOnly, includePast } = req.query
+  const { location, level, type, openOnly, includePast, q } = req.query
   res.json(
     store.list({
       location,
       level,
       type,
+      q,
       openOnly: openOnly === 'true',
       includePast: includePast === 'true',
     }),

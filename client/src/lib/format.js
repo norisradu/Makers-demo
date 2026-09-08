@@ -72,6 +72,16 @@ export function groupByDay(announcements) {
   return groups
 }
 
+/**
+ * Wraps every occurrence of the active search term in a <mark>, so a hit is
+ * obvious at a glance instead of making people re-read the card.
+ */
+export function highlight(text, query) {
+  const needle = (query || '').trim()
+  if (!needle) return text
+  return text.replace(new RegExp(`(${needle})`, 'gi'), '<mark class="hit">$1</mark>')
+}
+
 /** "Vlad P." → "VP", "FC Zorilor" → "FZ". */
 export function initials(name) {
   const parts = name.trim().split(/\s+/).filter(Boolean)
