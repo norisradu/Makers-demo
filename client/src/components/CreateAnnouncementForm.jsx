@@ -100,7 +100,7 @@ export default function CreateAnnouncementForm({ meta, currentUser, onCreate, on
     ))
 
   return (
-    <form className="panel form" onSubmit={submit}>
+    <form className="panel form" onSubmit={submit} autoComplete="off">
       <h2>Post an announcement</h2>
       <p className="muted">
         Missing players for a booked pitch, or free to play and waiting to be called — both go here.
