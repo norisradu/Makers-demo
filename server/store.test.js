@@ -74,3 +74,16 @@ test('caller-supplied id/createdAt/joined in fields override the generated ones'
   assert.equal(created.createdAt, '2000-01-01T00:00:00.000Z')
   assert.deepEqual(created.joined, ['Preloaded Player'])
 })
+
+// get(id) returning a matching record for a valid id is already exercised by
+// "created announcement is retrievable via get() and list()" above, so it's
+// not repeated here.
+test('get() reflects mutations made by join() and leave() on the same record', () => {
+  const created = store.create(futureFields)
+
+  store.join(created.id, 'Radu')
+  assert.deepEqual(store.get(created.id).joined, ['Radu'])
+
+  store.leave(created.id, 'radu') // case-insensitive, matching store.leave()'s own comparison
+  assert.deepEqual(store.get(created.id).joined, [])
+})
